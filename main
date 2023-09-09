@@ -13,14 +13,16 @@ Create a Terraform configuration file (e.g., main.tf) with the following content
 
 hcl
 
+
 provider "aws" {
   region = "us-east-1" # Change to your desired region
 }
 
 resource "aws_instance" "jenkins_instance" {
-  ami           = "ami-xxxxxxxxxxxxxxxxx" # Replace with your desired AMI ID
-  instance_type = "t2.micro" # Change to your desired instance type
-  key_name      = "your-keypair-name" # Replace with your key pair name
+  ami           = "ami-01c647eace872fc02" # Replace with your desired AMI ID
+ 
+instance_type = "t2.micro" # Change to your desired instance type
+  key_name      = "Simplilern project 2" # Replace with your key pair name
 
   tags = {
     Name = "Jenkins-Instance"
