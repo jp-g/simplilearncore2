@@ -1,0 +1,88 @@
+To achieve the expected deliverables of launching an EC2 instance using Terraform, connecting to the instance, and installing Jenkins, Java, and Python on it, you can follow the steps below. Please note that this is a high-level overview, and you may need to adapt it to your specific requirements and AWS setup.
+
+Prerequisites:
+
+    An AWS account with appropriate permissions.
+    AWS CLI installed and configured with your credentials.
+    Terraform installed on your local machine.
+    A key pair created in AWS.
+
+Step 1: Create a Terraform Configuration File
+
+Create a Terraform configuration file (e.g., main.tf) with the following content:
+
+hcl
+
+provider "aws" {
+  region = "us-east-1" # Change to your desired region
+}
+
+resource "aws_instance" "jenkins_instance" {
+  ami           = "ami-xxxxxxxxxxxxxxxxx" # Replace with your desired AMI ID
+  instance_type = "t2.micro" # Change to your desired instance type
+  key_name      = "your-keypair-name" # Replace with your key pair name
+
+  tags = {
+    Name = "Jenkins-Instance"
+  }
+}
+
+Replace the ami, instance_type, and key_name with appropriate values for your setup. You can find the desired AMI ID in the AWS Management Console.
+
+Step 2: Initialize Terraform
+
+In your terminal, navigate to the directory containing the Terraform configuration file and run:
+
+bash
+
+terraform init
+
+This initializes Terraform and downloads the necessary provider plugins.
+
+Step 3: Create the EC2 Instance
+
+Run the following command to create the EC2 instance:
+
+bash
+
+terraform apply
+
+Terraform will prompt you to confirm the changes. Type yes to proceed. Terraform will create the EC2 instance based on your configuration.
+
+Step 4: Connect to the EC2 Instance
+
+After the EC2 instance is created, you can use SSH to connect to it. Replace <public_ip> with the actual public IP address of your instance:
+
+bash
+
+ssh -i /path/to/your/keypair.pem ec2-user@<public_ip>
+
+Step 5: Install Jenkins, Java, and Python
+
+Once connected to the instance, you can install Jenkins, Java, and Python. Here are the basic commands for a CentOS-based instance (you might need to adjust them for other distributions):
+
+bash
+
+# Update the package manager
+sudo yum update -y
+
+# Install Java
+sudo yum install java-1.8.0-openjdk -y
+
+# Install Python
+sudo yum install python3 -y
+
+# Install Jenkins
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+sudo yum install jenkins -y
+
+# Start Jenkins service
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+
+Step 6: Access Jenkins Web Interface
+
+You can access the Jenkins web interface by opening a web browser and navigating to http://<public_ip>:8080. You will need to retrieve the Jenkins initial admin password from the server and follow the setup wizard to complete the Jenkins installation.
+
+That's it! You've automated the provisioning of an EC2 instance using Terraform and installed Jenkins, Java, and Python on it using Ansible. Please ensure you have the necessary security groups and network configurations in place to allow SSH and Jenkins access.
